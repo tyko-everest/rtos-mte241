@@ -57,6 +57,24 @@ __asm void PendSV_Handler(void) {
 	BX		LR
 }
 
+
+
+void t1(void *arg) {
+	while (1) {
+		for(int i = 0; i < 1000000; i++);
+		printf("task1\n");
+	}
+}
+
+void t2(void *arg) {
+	while(1) {
+	  for(int i = 0; i < 1000000; i++);
+		printf("task2\n");
+	}
+}
+
+
+
 void SysTick_Handler(void) {
 	
 	uint32_t temp = curr_sp;
@@ -73,16 +91,18 @@ void os_kernel_init(void) {
 	for (int i = 0; i < MAX_NUM_TASKS; i++) {
 		tcb_list[i].sp = (uint32_t*) TASK_STACK_BASE_ADDR(i);
 	}
-    // add the idle task as task 0
-	os_add_task(os_idle_task, NULL);
-    // init the running list to point to the idle task
-    running.head = tcb_list[0];
-    running.tail = tcb_list[0];
-    // init the ready task lists so all pointers point to NULL
-    for (int i = 0; i < NUM_PRIORITIES; i++) {
-        ready[i].head = NULL;
-        ready[i].tail = NULL;
-    }
+	// add the idle task as task 0
+	os_task_attribs_t idle_attribs = {LOWEST_PRIORITY};
+	os_add_task(os_idle_task, NULL, &idle_attribs);
+	// init the running list to point to the idle task
+	running.head = &tcb_list[0];
+	running.tail = &tcb_list[0];
+	// init the ready task lists so all pointers point to NULL
+	for (int i = 0; i < NUM_PRIORITIES; i++) {
+		
+		ready[i].head = NULL;
+		ready[i].tail = NULL;
+	}
 }
 
 os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_t *attribs) {
@@ -92,14 +112,21 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
 	if (curr_num_tasks == MAX_NUM_TASKS) {
 		return OS_ERR_MEM;
 	}
-    // check the parameters are valid
-    if (attribs->priority < HIGHEST_PRIORITY || attribs->priority > LOWEST_PRIORITY) {
-        return OS_ERR_ARG;
-    }
+	// default attribs accepted
+	if (attribs == NULL) {
+		os_task_attribs_t def_priorities = {DEF_PRIORITY};
+		attribs = &def_priorities;
 
-	tcb_list[curr_num_tasks].id = curr_num_tasks;
-    tcb_list[curr_num_tasks].priority = attribs->priority;
+	} else {
+		// check the parameters are valid
+		if (attribs->priority > LOWEST_PRIORITY) {
+			return OS_ERR_ARG;
+		}
+	}
+	tcb_list[curr_num_tasks].priority = attribs->priority;
 	
+	tcb_list[curr_num_tasks].id = curr_num_tasks;
+
 	// set the stack pointer to the end of this constructed stack setup
 	tcb_list[curr_num_tasks].sp -= NUM_REGS;
 	
@@ -143,7 +170,11 @@ void os_kernel_start() {
 	// every 20 ms switch
 	SysTick_Config(SystemCoreClock / 1000 * 100);
 	
-	// start idle task
+	// temporary verification of context switching
+	curr_sp = (uint32_t) tcb_list[2].sp;
+	next_sp = (uint32_t) tcb_list[1].sp;
+	
+	// call idle();
 	t1(NULL);
 }
 
@@ -162,8 +193,6 @@ void add_head_task(tcb_t *task, task_list_t *list) {
         list->tail = task;
     // if not add to start of list
     } else {
-        list->head->prev = task;
-        task->prev = NULL;
         task->next = list->head;
         list->head = task;
     } 
@@ -181,7 +210,6 @@ void add_tail_task(tcb_t *task, task_list_t *list) {
     // if not append to existing items
     } else {
         list->tail->next = task;
-        task->prev = list->tail;
         task->next = NULL;
         list->tail = task;
     }
@@ -189,7 +217,7 @@ void add_tail_task(tcb_t *task, task_list_t *list) {
 
 // returns the pointer of the removed tcb
 tcb_t * remove_head_task(task_list_t *list) {
-    tcb_t ret_tcb;
+    tcb_t *ret_tcb;
     // check if it is empty
     if (list->head == NULL) {
         ret_tcb = NULL;
@@ -203,34 +231,9 @@ tcb_t * remove_head_task(task_list_t *list) {
         ret_tcb = list->head;
         // advance the head to the second item in the list
         list->head = list->head->next;
-        // set its prev pointer to NULL
-        list->head->prev = NULL;
     }
     return ret_tcb;
 }
-
-// returns the pointer to the removed tcb
-tcb_t * remove_tail_task(task_list_t *list) {
-    tcb_t ret_tcb;
-    // check if it is empty
-    if (list->head == NULL) {
-        ret_tcb = NULL;
-    // check if it has only one tcb left
-    } else if (list->head == list->tail) {
-        ret_tcb = list->head;
-        list->head = NULL;
-        list->tail = NULL;
-    // more then one item left
-    } else {
-        ret_tcb = list->tail;
-        // regress the tail to the second last item in the list
-        list->tail = list->tail->prev;
-        // set its next pointer to NULL
-        list->tail->next = NULL;
-    }
-    return ret_tcb;
-}
-
 
 void os_idle_task(void *args) {
 	while(1);

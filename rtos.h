@@ -14,9 +14,13 @@
 #define NUM_PRIORITIES 32
 #define HIGHEST_PRIORITY 0
 #define LOWEST_PRIORITY (NUM_PRIORITIES - 1)
+#define DEF_PRIORITY 15
 
 #define MAIN_STACK_BASE_ADDR (*((volatile uint32_t*) 0))
 #define TASK_STACK_BASE_ADDR(x) ((MAIN_STACK_BASE_ADDR - 0x800 - (0x400 * x)))
+
+void t1(void *arg);
+void t2(void *arg);
 
 // used to store all needed information about a task
 struct _tcb {
