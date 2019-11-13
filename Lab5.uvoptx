@@ -145,22 +145,6 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>176</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>2362</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\rtos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\rtos.c\176</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
           <LineNumber>111</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>1920</Address>
@@ -175,7 +159,7 @@
           <Expression>\\Lab5\rtos.c\111</Expression>
         </Bp>
         <Bp>
-          <Number>2</Number>
+          <Number>1</Number>
           <Type>0</Type>
           <LineNumber>15</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -191,7 +175,7 @@
           <Expression>\\Lab5\rtos.c\15</Expression>
         </Bp>
         <Bp>
-          <Number>3</Number>
+          <Number>2</Number>
           <Type>0</Type>
           <LineNumber>129</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -207,7 +191,7 @@
           <Expression>\\Lab5\RTE/Device/LPC1768/startup_LPC17xx.s\129</Expression>
         </Bp>
         <Bp>
-          <Number>4</Number>
+          <Number>3</Number>
           <Type>0</Type>
           <LineNumber>13</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -223,20 +207,20 @@
           <Expression>\\Lab5\main.c\13</Expression>
         </Bp>
         <Bp>
-          <Number>5</Number>
+          <Number>4</Number>
           <Type>0</Type>
-          <LineNumber>140</LineNumber>
+          <LineNumber>112</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2062</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>.\rtos.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\rtos.c\140</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <MemoryWindow1>
@@ -349,6 +333,18 @@
       <bDave2>0</bDave2>
       <PathWithFileName>.\rtos.c</PathWithFileName>
       <FilenameWithoutPath>rtos.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>5</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\blocking.c</PathWithFileName>
+      <FilenameWithoutPath>blocking.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

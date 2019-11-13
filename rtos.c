@@ -139,7 +139,7 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
 	// we don't care about the rest of the registers
 
     // add this tcb to the appropriate linked list
-	add_tail_task(tcb_list + curr_num_tasks, ready + attribs->priority);
+	enqueue(tcb_list + curr_num_tasks, ready + attribs->priority);
 
 	curr_num_tasks++;
 	
@@ -178,27 +178,7 @@ void os_kernel_start() {
 	t1(NULL);
 }
 
-void os_schedule() {
-    
-}
-
-void add_head_task(tcb_t *task, task_list_t *list) {
-    // check task is not NULL
-    if (task == NULL) {
-        return;
-    }
-    // check if the list is empty
-    if (list->head == NULL) {
-        list->head = task;
-        list->tail = task;
-    // if not add to start of list
-    } else {
-        task->next = list->head;
-        list->head = task;
-    } 
-}
-
-void add_tail_task(tcb_t *task, task_list_t *list) {
+void enqueue(tcb_t *task, task_list_t *list) {
     // check task is not NULL
     if (task == NULL) {
         return;
@@ -216,7 +196,7 @@ void add_tail_task(tcb_t *task, task_list_t *list) {
 }
 
 // returns the pointer of the removed tcb
-tcb_t * remove_head_task(task_list_t *list) {
+tcb_t * dequeue(task_list_t *list) {
     tcb_t *ret_tcb;
     // check if it is empty
     if (list->head == NULL) {

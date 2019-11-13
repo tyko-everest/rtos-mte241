@@ -400,6 +400,11 @@
               <FileType>1</FileType>
               <FilePath>.\rtos.c</FilePath>
             </File>
+            <File>
+              <FileName>blocking.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\blocking.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
