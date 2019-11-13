@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "rtos.h"
+
 #define MAX_NUM_TASKS 6
 #define NUM_REGS 16
 #define PCR_DEF_VAL 0x01000000
@@ -72,9 +74,8 @@ void os_kernel_start(void);
 void os_schedule(void);
 
 // task list manipulation functions
-void add_tail_task(tcb_t *task, task_list_t *list);
-tcb_t * remove_head_task(task_list_t *list);
-tcb_t * remove_tail_task(task_list_t *list);
+void enqueue(tcb_t *task, task_list_t *list);
+tcb_t * dequeue(task_list_t *list);
 
 /** os_idle_task
  * Idle task, used be scheduler when nothing else is running
