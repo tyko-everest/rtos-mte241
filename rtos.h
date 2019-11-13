@@ -8,6 +8,8 @@
 #include <string.h>
 //#include "scheduler.h"
 
+#include "rtos.h"
+
 #define MAX_NUM_TASKS 6
 #define NUM_REGS 16
 #define PCR_DEF_VAL 0x01000000
