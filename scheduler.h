@@ -8,8 +8,6 @@
 // find next task to move to running list && update global variable holding list of 
 void os_schedule(void);
 
-// Count leading zeroes
-task_list_t* highest_priority_list(task_list_t* list);
 // move next task to the running list
 
 #endif /* INCLUDE_SCHEDULER_H */

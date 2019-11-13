@@ -55,4 +55,8 @@ typedef void (*os_task_func_t) (void *args);
 void enqueue(tcb_t *task, task_list_t *list);
 tcb_t * dequeue(task_list_t *list);
 
+// given an array of task lists, it returns a pointer to
+// the highest priority non-empty list
+task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask);
+
 #endif /* INCLUDE_RTOS_H */

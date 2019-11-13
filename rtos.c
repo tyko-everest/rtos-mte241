@@ -104,3 +104,18 @@ tcb_t * dequeue(task_list_t *list) {
     }
     return ret_tcb;
 }
+
+task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask) {
+	
+	if (list == NULL) {
+		return NULL;
+	}
+	
+	uint32_t leading_zeroes = 0;
+	
+	__asm {
+		CLZ leading_zeroes, priority_mask
+	}
+	return NULL;
+	//while(1);
+}

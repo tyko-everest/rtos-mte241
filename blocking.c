@@ -40,6 +40,7 @@ void os_wait(os_semaphore_t *sem) {
 void os_signal(os_semaphore_t *sem) {
 	__disable_irq();
 	sem->count++;
+	
 	__enable_irq();
 	//os_schedule();
 }

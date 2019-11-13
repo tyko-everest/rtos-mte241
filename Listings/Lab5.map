@@ -40,15 +40,14 @@ Section Cross References
     uart.o(i.getFrequency) refers to system_lpc17xx.o(.data) for SystemCoreClock
     main.o(i.main) refers to noretval__2printf.o(.text) for __2printf
     main.o(i.main) refers to kernel.o(i.os_kernel_init) for os_kernel_init
-    main.o(i.main) refers to scheduler.o(i.highest_priority_list) for highest_priority_list
+    main.o(i.main) refers to rtos.o(i.highest_priority_list) for highest_priority_list
     main.o(i.main) refers to kernel.o(i.os_kernel_start) for os_kernel_start
-    main.o(i.main) refers to rtos.o(.data) for running
+    main.o(i.main) refers to rtos.o(.data) for ready_mask
     rtos.o(.emb_text) refers to rtos.o(.data) for curr_sp
     blocking.o(i.os_new_semaphore) refers to blocking.o(.data) for num_sems
     blocking.o(i.os_new_semaphore) refers to blocking.o(.bss) for sem_list
     blocking.o(i.os_wait) refers to rtos.o(i.enqueue) for enqueue
     blocking.o(i.os_wait) refers to rtos.o(.data) for running
-    scheduler.o(i.highest_priority_list) refers to rtos.o(.data) for ready_mask
     kernel.o(i.os_add_task) refers to rtos.o(i.enqueue) for enqueue
     kernel.o(i.os_add_task) refers to kernel.o(.data) for curr_num_tasks
     kernel.o(i.os_add_task) refers to kernel.o(.constdata) for .constdata
@@ -394,8 +393,8 @@ Image Symbol Table
     i.ferror                                 0x000006c0   Section        0  retarget.o(i.ferror)
     i.fputc                                  0x000006c8   Section        0  retarget.o(i.fputc)
     i.getFrequency                           0x000006d8   Section        0  uart.o(i.getFrequency)
-    i.highest_priority_list                  0x00000720   Section        0  scheduler.o(i.highest_priority_list)
-    i.main                                   0x0000073c   Section        0  main.o(i.main)
+    i.highest_priority_list                  0x00000720   Section        0  rtos.o(i.highest_priority_list)
+    i.main                                   0x00000734   Section        0  main.o(i.main)
     i.os_add_task                            0x0000076c   Section        0  kernel.o(i.os_add_task)
     i.os_idle_task                           0x00000848   Section        0  kernel.o(i.os_idle_task)
     i.os_kernel_init                         0x0000084c   Section        0  kernel.o(i.os_kernel_init)
@@ -569,8 +568,8 @@ Image Symbol Table
     ferror                                   0x000006c1   Thumb Code     8  retarget.o(i.ferror)
     fputc                                    0x000006c9   Thumb Code    14  retarget.o(i.fputc)
     getFrequency                             0x000006d9   Thumb Code    62  uart.o(i.getFrequency)
-    highest_priority_list                    0x00000721   Thumb Code    24  scheduler.o(i.highest_priority_list)
-    main                                     0x0000073d   Thumb Code    28  main.o(i.main)
+    highest_priority_list                    0x00000721   Thumb Code    18  rtos.o(i.highest_priority_list)
+    main                                     0x00000735   Thumb Code    32  main.o(i.main)
     os_add_task                              0x0000076d   Thumb Code   200  kernel.o(i.os_add_task)
     os_idle_task                             0x00000849   Thumb Code     4  kernel.o(i.os_idle_task)
     os_kernel_init                           0x0000084d   Thumb Code    86  kernel.o(i.os_kernel_init)
@@ -698,8 +697,9 @@ Memory Map of the image
     0x000006c8   0x000006c8   0x0000000e   Code   RO            5    i.fputc             retarget.o
     0x000006d6   0x000006d6   0x00000002   PAD
     0x000006d8   0x000006d8   0x00000048   Code   RO           87    i.getFrequency      uart.o
-    0x00000720   0x00000720   0x0000001c   Code   RO          346    i.highest_priority_list  scheduler.o
-    0x0000073c   0x0000073c   0x00000030   Code   RO          207    i.main              main.o
+    0x00000720   0x00000720   0x00000012   Code   RO          262    i.highest_priority_list  rtos.o
+    0x00000732   0x00000732   0x00000002   PAD
+    0x00000734   0x00000734   0x00000038   Code   RO          207    i.main              main.o
     0x0000076c   0x0000076c   0x000000dc   Code   RO          378    i.os_add_task       kernel.o
     0x00000848   0x00000848   0x00000004   Code   RO          379    i.os_idle_task      kernel.o
     0x0000084c   0x0000084c   0x0000006c   Code   RO          380    i.os_kernel_init    kernel.o
@@ -715,7 +715,7 @@ Memory Map of the image
 
     0x10000000   0x000009c4   0x0000000c   Data   RW            8    .data               retarget.o
     0x1000000c   0x000009d0   0x00000020   Data   RW           89    .data               uart.o
-    0x1000002c   0x000009f0   0x00000014   Data   RW          263    .data               rtos.o
+    0x1000002c   0x000009f0   0x00000014   Data   RW          264    .data               rtos.o
     0x10000040   0x00000a04   0x00000004   Data   RW          383    .data               kernel.o
     0x10000044   0x00000a08   0x00000004   Data   RW          446    .data               system_lpc17xx.o
 
@@ -725,7 +725,7 @@ Memory Map of the image
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x10000048        -       0x00000080   Zero   RW           88    .bss                uart.o
-    0x100000c8        -       0x00000160   Zero   RW          262    .bss                rtos.o
+    0x100000c8        -       0x00000160   Zero   RW          263    .bss                rtos.o
     0x10000228        -       0x00000060   Zero   RW          532    .bss                c_w.l(libspace.o)
     0x10000288        -       0x00000000   Zero   RW          432    HEAP                startup_lpc17xx.o
     0x10000288        -       0x00002000   Zero   RW          431    STACK               startup_lpc17xx.o
@@ -738,19 +738,18 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       532         66          8          4          0      33911   kernel.o
-        48         20          0          0          0      18199   main.o
+       532         66          8          4          0      33731   kernel.o
+        56         24          0          0          0      18143   main.o
         94          4          0         12          0       8307   retarget.o
-       136         14          0         20        352       1824   rtos.o
-        28          4          0          0          0        898   scheduler.o
-        64         26        204          0       8192       1036   startup_lpc17xx.o
+       154         14          0         20        352       2260   rtos.o
+        64         26        204          0       8192        976   startup_lpc17xx.o
        320         18          0          4          0        843   system_lpc17xx.o
        616         86          0         32        128      49299   uart.o
 
     ----------------------------------------------------------------------
-      1844        238        244         72       8672     114317   Object Totals
+      1844        238        244         72       8672     113559   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         6          0          0          0          0          0   (incl. Padding)
+         8          0          0          0          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -798,8 +797,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      2256        264        244         72       8768     113805   Grand Totals
-      2256        264        244         72       8768     113805   ELF Image Totals
+      2256        264        244         72       8768     113047   Grand Totals
+      2256        264        244         72       8768     113047   ELF Image Totals
       2256        264        244         72          0          0   ROM Totals
 
 ==============================================================================
