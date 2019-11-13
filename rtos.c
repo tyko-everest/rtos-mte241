@@ -6,6 +6,8 @@ tcb_t tcb_list[MAX_NUM_TASKS] = {0};
 task_list_t running;
 task_list_t ready[NUM_PRIORITIES];
 
+uint32_t ready_mask = 0;
+
 // useful info
 // https://www.adamh.cz/blog/2016/07/context-switch-on-the-arm-cortex-m0/
 // https://github.com/adamheinrich/os.h/blob/blog_2016_07/src/os_pendsv_handler.s
@@ -138,9 +140,12 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
 	tcb_list[curr_num_tasks].sp[15] = PCR_DEF_VAL;
 	// we don't care about the rest of the registers
 
-    // add this tcb to the appropriate linked list
-	add_tail_task(tcb_list + curr_num_tasks, ready + attribs->priority);
+	// add this tcb to the appropriate linked list
+	enqueue(tcb_list + curr_num_tasks, ready + attribs->priority);
 
+	uint32_t bitshift = (LOWEST_PRIORITY - attribs->priority);
+	ready_mask |= 1 << bitshift;
+	
 	curr_num_tasks++;
 	
 	return OS_OK;
@@ -178,27 +183,7 @@ void os_kernel_start() {
 	t1(NULL);
 }
 
-void os_schedule() {
-    
-}
-
-void add_head_task(tcb_t *task, task_list_t *list) {
-    // check task is not NULL
-    if (task == NULL) {
-        return;
-    }
-    // check if the list is empty
-    if (list->head == NULL) {
-        list->head = task;
-        list->tail = task;
-    // if not add to start of list
-    } else {
-        task->next = list->head;
-        list->head = task;
-    } 
-}
-
-void add_tail_task(tcb_t *task, task_list_t *list) {
+void enqueue(tcb_t *task, task_list_t *list) {
     // check task is not NULL
     if (task == NULL) {
         return;
@@ -216,7 +201,7 @@ void add_tail_task(tcb_t *task, task_list_t *list) {
 }
 
 // returns the pointer of the removed tcb
-tcb_t * remove_head_task(task_list_t *list) {
+tcb_t * dequeue(task_list_t *list) {
     tcb_t *ret_tcb;
     // check if it is empty
     if (list->head == NULL) {

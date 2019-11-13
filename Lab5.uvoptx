@@ -145,73 +145,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>176</LineNumber>
+          <LineNumber>18</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2362</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\rtos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\rtos.c\176</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>111</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>1920</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\rtos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\rtos.c\111</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>15</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>360</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\rtos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\rtos.c\15</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>129</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>448</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>N:\MTE241\Lab5\RTE\Device\LPC1768\startup_LPC17xx.s</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\RTE/Device/LPC1768/startup_LPC17xx.s\129</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>13</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>1850</Address>
+          <Address>1880</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -220,23 +156,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\main.c\13</Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>0</Type>
-          <LineNumber>140</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>2062</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\rtos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\rtos.c\140</Expression>
+          <Expression>\\Lab5\main.c\18</Expression>
         </Bp>
       </Breakpoint>
       <MemoryWindow1>
@@ -344,11 +264,23 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>4</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\rtos.c</PathWithFileName>
       <FilenameWithoutPath>rtos.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>5</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>1</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\scheduler.c</PathWithFileName>
+      <FilenameWithoutPath>scheduler.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

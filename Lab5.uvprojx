@@ -400,6 +400,11 @@
               <FileType>1</FileType>
               <FilePath>.\rtos.c</FilePath>
             </File>
+            <File>
+              <FileName>scheduler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\scheduler.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
