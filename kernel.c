@@ -61,7 +61,7 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
 	// we don't care about the rest of the registers
 
 	// add this tcb to the appropriate linked list
-	enqueue(tcb_list + curr_num_tasks, ready + attribs->priority);
+	enqueue(tcb_list + curr_num_tasks, ready + attribs->priority, &ready_mask);
 
 	uint32_t bitshift = (LOWEST_PRIORITY - attribs->priority);
 	ready_mask |= 1 << bitshift;
