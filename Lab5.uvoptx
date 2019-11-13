@@ -146,7 +146,7 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>leading_zeroes</ItemText>
+          <ItemText>sem_list[0]</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
