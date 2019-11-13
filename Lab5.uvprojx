@@ -401,9 +401,19 @@
               <FilePath>.\rtos.c</FilePath>
             </File>
             <File>
+              <FileName>blocking.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\blocking.c</FilePath>
+            </File>
+            <File>
               <FileName>scheduler.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\scheduler.c</FilePath>
+            </File>
+            <File>
+              <FileName>kernel.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\kernel.c</FilePath>
             </File>
           </Files>
         </Group>

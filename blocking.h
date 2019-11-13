@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "rtos.h"
+#include "scheduler.h"
 
 #define MAX_SEMAPHORES 8
 

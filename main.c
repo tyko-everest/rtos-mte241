@@ -4,7 +4,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "kernel.h"
+
 #include "rtos.h"
+#include "scheduler.h"
+extern task_list_t *running;
 
 int main(void) {
 
@@ -12,9 +16,8 @@ int main(void) {
 	printf("\nStarting...\n\n");
 	
 	os_kernel_init();
-	os_add_task(t1, NULL, NULL);
-	os_add_task(t2, NULL, NULL);
+	
+	highest_priority_list(running);
 	
 	os_kernel_start();
-	highest_priority_list(NULL);
 }
