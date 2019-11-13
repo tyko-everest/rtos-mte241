@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+//#include "scheduler.h"
 
 #include "rtos.h"
 
@@ -69,9 +70,6 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
  * Never returns
  */
 void os_kernel_start(void);
-
-// called to figure out which task should run next
-void os_schedule(void);
 
 // task list manipulation functions
 void enqueue(tcb_t *task, task_list_t *list);

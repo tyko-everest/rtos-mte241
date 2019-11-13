@@ -401,9 +401,9 @@
               <FilePath>.\rtos.c</FilePath>
             </File>
             <File>
-              <FileName>blocking.c</FileName>
+              <FileName>scheduler.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\blocking.c</FilePath>
+              <FilePath>.\scheduler.c</FilePath>
             </File>
           </Files>
         </Group>

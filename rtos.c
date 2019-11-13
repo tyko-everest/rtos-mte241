@@ -6,6 +6,8 @@ tcb_t tcb_list[MAX_NUM_TASKS] = {0};
 task_list_t running;
 task_list_t ready[NUM_PRIORITIES];
 
+uint32_t ready_mask = 0;
+
 // useful info
 // https://www.adamh.cz/blog/2016/07/context-switch-on-the-arm-cortex-m0/
 // https://github.com/adamheinrich/os.h/blob/blog_2016_07/src/os_pendsv_handler.s
@@ -138,9 +140,12 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
 	tcb_list[curr_num_tasks].sp[15] = PCR_DEF_VAL;
 	// we don't care about the rest of the registers
 
-    // add this tcb to the appropriate linked list
+	// add this tcb to the appropriate linked list
 	enqueue(tcb_list + curr_num_tasks, ready + attribs->priority);
 
+	uint32_t bitshift = (LOWEST_PRIORITY - attribs->priority);
+	ready_mask |= 1 << bitshift;
+	
 	curr_num_tasks++;
 	
 	return OS_OK;

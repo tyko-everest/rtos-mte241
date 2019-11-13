@@ -6,7 +6,6 @@
 
 #include "rtos.h"
 
-
 int main(void) {
 
 	
@@ -17,5 +16,5 @@ int main(void) {
 	os_add_task(t2, NULL, NULL);
 	
 	os_kernel_start();
-	
+	highest_priority_list(NULL);
 }
