@@ -28,7 +28,7 @@ os_error_t os_new_semaphore(os_semaphore_t *sem, uint32_t init_count) {
 void os_wait(os_semaphore_t *sem) {
 	// check if we need to block first
 	if (sem->count == 0) {
-		enqueue(running->head, &(sem->blocked[running->head->priority]));
+		enqueue(running->head, &(sem->blocked[running->head->priority]), 0);
 		//os_schedule();
 	}
 	__disable_irq();

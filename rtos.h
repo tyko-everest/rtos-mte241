@@ -52,8 +52,8 @@ typedef enum _os_error {
 typedef void (*os_task_func_t) (void *args);
 
 // task list manipulation functions
-void enqueue(tcb_t *task, task_list_t *list);
-tcb_t * dequeue(task_list_t *list);
+void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask);
+tcb_t * dequeue(task_list_t *list, uint32_t *mask);
 
 // given an array of task lists, it returns a pointer to
 // the highest priority non-empty list

@@ -415,6 +415,11 @@
               <FileType>1</FileType>
               <FilePath>.\kernel.c</FilePath>
             </File>
+            <File>
+              <FileName>test_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\test_queue.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

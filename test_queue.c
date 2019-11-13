@@ -21,10 +21,7 @@ void t2(void *arg) {
 	while (1);
 }
 
-int main(void) {
-
-	
-	printf("\nStarting...\n\n");
+int test_queues(void) {
 	
 	os_kernel_init();
 	
