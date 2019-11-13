@@ -63,46 +63,59 @@ __asm void PendSV_Handler(void) {
 	BX		LR
 }
 
-void SysTick_Handler(void) {
-	// set a pending context switch
-	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
-}
-
-void enqueue(tcb_t *task, task_list_t *list) {
-    // check task is not NULL
-    if (task == NULL) {
-        return;
-    }
-    // check if the list is empty
-    if (list->head == NULL) {
-        list->head = task;
-        list->tail = task;
-    // if not append to existing items
-    } else {
-        list->tail->next = task;
-        task->next = NULL;
-        list->tail = task;
-    }
+void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask) {
+	// disable IRQ to ensure function runs fully
+	__disable_irq();
+	// check task is not NULL
+	if (task == NULL) {
+		return;
+	}
+	// check if the list is empty
+	if (list->head == NULL) {
+		list->head = task;
+		list->tail = task;
+		
+		//update mask
+		if (mask != NULL) {
+			uint32_t bitshift = (LOWEST_PRIORITY - task->priority);
+			*mask |= 1 << bitshift;
+		}
+	// if not append to existing items
+	} else {
+		list->tail->next = task;
+		task->next = NULL;
+		list->tail = task;
+	}
+	__enable_irq();
 }
 
 // returns the pointer of the removed tcb
-tcb_t * dequeue(task_list_t *list) {
-    tcb_t *ret_tcb;
-    // check if it is empty
-    if (list->head == NULL) {
-        ret_tcb = NULL;
-    // check if it has only one tcb left
-    } else if (list->head == list->tail) {
-        ret_tcb = list->head;
-        list->head = NULL;
-        list->tail = NULL;
-    // more then one item left
-    } else {
-        ret_tcb = list->head;
-        // advance the head to the second item in the list
-        list->head = list->head->next;
-    }
-    return ret_tcb;
+tcb_t * dequeue(task_list_t *list, uint32_t *mask) {
+	// disable IRQ to ensure function runs fully
+	__disable_irq();
+	tcb_t *ret_tcb;
+	// check if it is empty
+	if (list->head == NULL) {
+		ret_tcb = NULL;
+	// check if it has only one tcb left
+	} else if (list->head == list->tail) {
+		ret_tcb = list->head;
+		list->head = NULL;
+		list->tail = NULL;
+		
+		//update mask
+		if (mask != NULL) {
+			uint32_t bitshift = (LOWEST_PRIORITY - ret_tcb->priority);
+			*mask &= ~(1 << bitshift);
+		}
+	// more then one item left
+	} else {
+		ret_tcb = list->head;
+		// advance the head to the second item in the list
+		list->head = list->head->next;
+	}
+	__enable_irq();
+	return ret_tcb;
 }
 
 task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask) {
@@ -116,6 +129,6 @@ task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask) {
 	__asm {
 		CLZ leading_zeroes, priority_mask
 	}
-	return NULL;
-	//while(1);
+
+	return list + leading_zeroes;
 }

@@ -33,8 +33,9 @@ void os_wait(os_semaphore_id_t sem_id) {
 	__disable_irq();
 	// check if we need to block first
 	if (sem_list[sem_id].count == 0) {
-		enqueue(running->head, sem_list[sem_id].blocked + running->head->priority);//, sem->blocked_mask);
+		enqueue(running->head, sem_list[sem_id].blocked + running->head->priority, sem->blocked_mask);
 		os_schedule();
+
 	}
 	sem_list[sem_id].count--;
 	__enable_irq();
