@@ -63,11 +63,6 @@ __asm void PendSV_Handler(void) {
 	BX		LR
 }
 
-void SysTick_Handler(void) {
-	// set a pending context switch
-	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
-}
-
 void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask) {
 	// disable IRQ to ensure function runs fully
 	__disable_irq();
@@ -81,8 +76,10 @@ void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask) {
 		list->tail = task;
 		
 		//update mask
-		uint32_t bitshift = (LOWEST_PRIORITY - task->priority);
-		*mask |= 1 << bitshift;
+		if (mask != NULL) {
+			uint32_t bitshift = (LOWEST_PRIORITY - task->priority);
+			*mask |= 1 << bitshift;
+		}
 	// if not append to existing items
 	} else {
 		list->tail->next = task;
@@ -107,8 +104,10 @@ tcb_t * dequeue(task_list_t *list, uint32_t *mask) {
 		list->tail = NULL;
 		
 		//update mask
-		uint32_t bitshift = (LOWEST_PRIORITY - ret_tcb->priority);
-		*mask &= ~(1 << bitshift);
+		if (mask != NULL) {
+			uint32_t bitshift = (LOWEST_PRIORITY - ret_tcb->priority);
+			*mask &= ~(1 << bitshift);
+		}
 	// more then one item left
 	} else {
 		ret_tcb = list->head;
@@ -130,5 +129,6 @@ task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask) {
 	__asm {
 		CLZ leading_zeroes, priority_mask
 	}
-	return NULL;
+
+	return list + leading_zeroes;
 }

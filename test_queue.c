@@ -21,7 +21,7 @@ void t2(void *arg) {
 	while (1);
 }
 
-int test_queues(void) {
+void test_queues(void) {
 	
 	os_kernel_init();
 	
@@ -37,4 +37,3 @@ int test_queues(void) {
 
 	os_kernel_start();
 }
-
