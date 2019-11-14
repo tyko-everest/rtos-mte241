@@ -4,8 +4,6 @@ extern task_list_t running;
 extern task_list_t ready[NUM_PRIORITIES];
 extern tcb_t tcb_list[MAX_NUM_TASKS];
 extern uint32_t ready_mask;
-extern uint32_t curr_sp, next_sp;
-
 
 void os_kernel_init(void) {
 	// initialize the saved stack pointer in each tcb
@@ -94,12 +92,8 @@ void os_kernel_start() {
     // context switching should be the lowest priority
 	NVIC_SetPriority(PendSV_IRQn, 0xFF);
 	
-	// every 20 ms switch
+	// every 5 ms switch
 	SysTick_Config(SystemCoreClock / 1000 * 20);
-	
-	// temporary verification of context switching
-	curr_sp = (uint32_t) tcb_list[2].sp;
-	next_sp = (uint32_t) tcb_list[1].sp;
 	
 	// call scheduler
 	os_schedule(false);

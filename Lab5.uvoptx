@@ -145,25 +145,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>21</LineNumber>
+          <LineNumber>100</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>360</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\rtos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\rtos.c\21</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>106</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>2542</Address>
+          <Address>2538</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -172,7 +156,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\kernel.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Lab5\kernel.c\106</Expression>
+          <Expression>\\Lab5\kernel.c\100</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>44</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>402</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>.\rtos.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Lab5\rtos.c\44</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -190,6 +190,11 @@
           <count>2</count>
           <WinNumber>1</WinNumber>
           <ItemText>running.head</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>tcb_list</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

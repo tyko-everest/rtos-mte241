@@ -36,8 +36,8 @@ void os_wait(os_semaphore_id_t sem_id) {
 	if (sem_list[sem_id].count == 0) {
 		enqueue(running->head, sem_list[sem_id].blocked + running->head->priority, &sem_list[sem_id].blocked_mask);
 		os_schedule(true);
-
 	}
+	__disable_irq();
 	sem_list[sem_id].count--;
 	__enable_irq();
 }

@@ -1,7 +1,7 @@
 #include "rtos.h"
 
 // used by the scheduler to manage context switches
-uint32_t curr_sp = 0, next_sp = 0;
+uint32_t **curr_sp, **next_sp;
 // memory for tcbs
 tcb_t tcb_list[MAX_NUM_TASKS] = {0};
 // running "list", only even one item
@@ -33,13 +33,17 @@ __asm void PendSV_Handler(void) {
 	PUSH {R5}
 	PUSH {R4}
 	
-	// get address of current tasks's sp
-	LDR R0,=__cpp(&curr_sp)
+	// get address of pointer to curr_sp
+	LDR R1,=__cpp(&curr_sp)
+	// get pointer to curr_sp
+	LDR R0, [R1]
 	// store current end of task's stack pointer
 	STR SP, [R0]
 	
-	// get sp of next task's stack into register
-	LDR R0,=__cpp(&next_sp)
+	// get address of pointer to next stack
+	LDR R1,=__cpp(&next_sp)
+	// get pointer to next stack
+	LDR R0, [R1]
 	LDR SP, [R0]
 		
 	POP {R4}

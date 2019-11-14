@@ -12,14 +12,14 @@ extern uint32_t prev_sp, curr_sp;
 os_semaphore_id_t sem;
 
 void delay() {
-	for (int i = 0; i < 1000000; i++);
+	for (int i = 0; i < 100000; i++);
 }
 
 void t1(void *arg) {
 	while (1) {
-		//os_wait(sem);
-		printf("task 1\n");
-		//os_signal(sem);
+		os_wait(sem);
+		printf("task1\n");
+		os_signal(sem);
 		
 		delay();
 		
@@ -28,8 +28,19 @@ void t1(void *arg) {
 
 void t2(void *arg) {
 	while (1) {
+		os_wait(sem);
+		printf("task2\n");
+		os_signal(sem);
+		
+		delay();
+		
+	}
+}
+
+void t3(void *arg) {
+	while (1) {
 		//os_wait(sem);
-		printf("task 2\n");
+		printf("task3\n");
 		//os_signal(sem);
 		
 		delay();
@@ -44,9 +55,11 @@ int main(void) {
 	
 	os_task_attribs_t t1_attribs = {1};
 	os_task_attribs_t t2_attribs = {1};
+	os_task_attribs_t t3_attribs = {1};
 	
 	os_add_task(t1, NULL, &t1_attribs);
 	os_add_task(t2, NULL, &t2_attribs);
+	//os_add_task(t3, NULL, &t3_attribs);
 	
 	os_new_semaphore(&sem, 1);
 	
