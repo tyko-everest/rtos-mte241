@@ -8,7 +8,7 @@ extern uint32_t next_sp;
 
 void os_schedule(bool blocked) {
 	
-	__disable_irq();
+	//__disable_irq();
 	
 	// dequeue running task from running list
 	tcb_t* prev_task = dequeue(&running, NULL);
@@ -31,13 +31,17 @@ void os_schedule(bool blocked) {
 	// manipulate curr_sp and next_sp
 	curr_sp = (uint32_t)prev_task->sp;
 	next_sp = (uint32_t)next_task->sp;
-	__enable_irq();
 	
-	// set a pending context switch
-	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
-
+	if (curr_sp != next_sp) {
+		// set a pending context switch
+		SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
+	}
+	
+	//__enable_irq();
 }
 
 void SysTick_Handler(void) {
+	__disable_irq();
 	os_schedule(false);
+	__enable_irq();
 }

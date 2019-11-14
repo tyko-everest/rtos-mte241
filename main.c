@@ -5,11 +5,50 @@
 #include <string.h>
 
 #include "kernel.h"
+#include "blocking.h"
+
+extern uint32_t prev_sp, curr_sp;
+
+os_semaphore_id_t sem;
+
+void delay() {
+	for (int i = 0; i < 1000000; i++);
+}
+
+void t1(void *arg) {
+	while (1) {
+		//os_wait(sem);
+		printf("task 1\n");
+		//os_signal(sem);
+		
+		delay();
+		
+	}
+}
+
+void t2(void *arg) {
+	while (1) {
+		//os_wait(sem);
+		printf("task 2\n");
+		//os_signal(sem);
+		
+		delay();
+		
+	}
+}
 
 int main(void) {
 	printf("\nStarting RTOS\n\n");
 	
 	os_kernel_init();
+	
+	os_task_attribs_t t1_attribs = {1};
+	os_task_attribs_t t2_attribs = {1};
+	
+	os_add_task(t1, NULL, &t1_attribs);
+	os_add_task(t2, NULL, &t2_attribs);
+	
+	os_new_semaphore(&sem, 1);
 	
 	os_kernel_start();
 }

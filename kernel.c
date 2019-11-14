@@ -60,8 +60,10 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
 	tcb_list[curr_num_tasks].sp[15] = PCR_DEF_VAL;
 	// we don't care about the rest of the registers
 
-	// add this tcb to the appropriate linked list
-	enqueue(tcb_list + curr_num_tasks, ready + attribs->priority, &ready_mask);
+	// add this tcb to the appropriate linked list, if its not the idle task
+	if (func_pointer != os_idle_task) {
+		enqueue(tcb_list + curr_num_tasks, ready + attribs->priority, &ready_mask);
+	}
 
 	uint32_t bitshift = (LOWEST_PRIORITY - attribs->priority);
 	ready_mask |= 1 << bitshift;
@@ -93,14 +95,14 @@ void os_kernel_start() {
 	NVIC_SetPriority(PendSV_IRQn, 0xFF);
 	
 	// every 20 ms switch
-	SysTick_Config(SystemCoreClock / 1000 * 100);
+	SysTick_Config(SystemCoreClock / 1000 * 20);
 	
 	// temporary verification of context switching
 	curr_sp = (uint32_t) tcb_list[2].sp;
 	next_sp = (uint32_t) tcb_list[1].sp;
 	
-	// call idle();
-	os_idle_task(NULL);
+	// call scheduler
+	os_schedule(false);
 }
 
 void os_idle_task(void *args) {

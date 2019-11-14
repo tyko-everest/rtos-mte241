@@ -129,6 +129,11 @@ task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask) {
 	__asm {
 		CLZ leading_zeroes, priority_mask
 	}
-
-	return list + leading_zeroes;
+	
+	// see if there is nothing in any of the ready lists
+	if (leading_zeroes == 32) {
+		return NULL;
+	} else {
+		return list + leading_zeroes;
+	}
 }

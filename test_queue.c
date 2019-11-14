@@ -1,3 +1,5 @@
+#ifdef TEST_QUEUE
+
 #include <LPC17xx.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -37,3 +39,5 @@ void test_queues(void) {
 
 	os_kernel_start();
 }
+
+#endif
