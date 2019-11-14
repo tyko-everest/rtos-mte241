@@ -5,39 +5,64 @@
 #include <string.h>
 
 #include "kernel.h"
+#include "blocking.h"
 
-#include "rtos.h"
-#include "scheduler.h"
+extern uint32_t prev_sp, curr_sp;
 
-extern task_list_t *running;
-extern uint32_t ready_mask;
-extern task_list_t ready[NUM_PRIORITIES];
+os_semaphore_id_t sem;
+
+void delay() {
+	for (int i = 0; i < 100000; i++);
+}
 
 void t1(void *arg) {
-	while (1);
+	while (1) {
+		os_wait(sem);
+		printf("task1\n");
+		os_signal(sem);
+		
+		delay();
+		
+	}
 }
 
 void t2(void *arg) {
-	while (1);
+	while (1) {
+		os_wait(sem);
+		printf("task2\n");
+		os_signal(sem);
+		
+		delay();
+		
+	}
+}
+
+void t3(void *arg) {
+	while (1) {
+		//os_wait(sem);
+		printf("task3\n");
+		//os_signal(sem);
+		
+		delay();
+		
+	}
 }
 
 int main(void) {
-
-	
-	printf("\nStarting...\n\n");
+	printf("\nStarting RTOS\n\n");
 	
 	os_kernel_init();
 	
-	highest_priority_list(running, ready_mask);
-	os_add_task(t1, NULL, NULL);
-	os_add_task(t2, NULL, NULL);
-	os_add_task(t2, NULL, NULL);
+	os_task_attribs_t t1_attribs = {1};
+	os_task_attribs_t t2_attribs = {1};
+	os_task_attribs_t t3_attribs = {1};
 	
-	dequeue(ready + DEF_PRIORITY, &ready_mask);
-	dequeue(ready + DEF_PRIORITY, &ready_mask);
-	dequeue(ready + DEF_PRIORITY, &ready_mask);
-	dequeue(ready + DEF_PRIORITY, &ready_mask);
-
+	os_add_task(t1, NULL, &t1_attribs);
+	os_add_task(t2, NULL, &t2_attribs);
+	//os_add_task(t3, NULL, &t3_attribs);
+	
+	os_new_semaphore(&sem, 1);
+	
 	os_kernel_start();
 }
 

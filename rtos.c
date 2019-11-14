@@ -1,7 +1,7 @@
 #include "rtos.h"
 
 // used by the scheduler to manage context switches
-uint32_t curr_sp = 0, next_sp = 0;
+uint32_t **curr_sp, **next_sp;
 // memory for tcbs
 tcb_t tcb_list[MAX_NUM_TASKS] = {0};
 // running "list", only even one item
@@ -33,13 +33,17 @@ __asm void PendSV_Handler(void) {
 	PUSH {R5}
 	PUSH {R4}
 	
-	// get address of current tasks's sp
-	LDR R0,=__cpp(&curr_sp)
+	// get address of pointer to curr_sp
+	LDR R1,=__cpp(&curr_sp)
+	// get pointer to curr_sp
+	LDR R0, [R1]
 	// store current end of task's stack pointer
 	STR SP, [R0]
 	
-	// get sp of next task's stack into register
-	LDR R0,=__cpp(&next_sp)
+	// get address of pointer to next stack
+	LDR R1,=__cpp(&next_sp)
+	// get pointer to next stack
+	LDR R0, [R1]
 	LDR SP, [R0]
 		
 	POP {R4}
@@ -63,11 +67,6 @@ __asm void PendSV_Handler(void) {
 	BX		LR
 }
 
-void SysTick_Handler(void) {
-	// set a pending context switch
-	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
-}
-
 void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask) {
 	// disable IRQ to ensure function runs fully
 	__disable_irq();
@@ -81,8 +80,10 @@ void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask) {
 		list->tail = task;
 		
 		//update mask
-		uint32_t bitshift = (LOWEST_PRIORITY - task->priority);
-		*mask |= 1 << bitshift;
+		if (mask != NULL) {
+			uint32_t bitshift = (LOWEST_PRIORITY - task->priority);
+			*mask |= 1 << bitshift;
+		}
 	// if not append to existing items
 	} else {
 		list->tail->next = task;
@@ -107,8 +108,10 @@ tcb_t * dequeue(task_list_t *list, uint32_t *mask) {
 		list->tail = NULL;
 		
 		//update mask
-		uint32_t bitshift = (LOWEST_PRIORITY - ret_tcb->priority);
-		*mask &= ~(1 << bitshift);
+		if (mask != NULL) {
+			uint32_t bitshift = (LOWEST_PRIORITY - ret_tcb->priority);
+			*mask &= ~(1 << bitshift);
+		}
 	// more then one item left
 	} else {
 		ret_tcb = list->head;
@@ -130,5 +133,11 @@ task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask) {
 	__asm {
 		CLZ leading_zeroes, priority_mask
 	}
-	return NULL;
+	
+	// see if there is nothing in any of the ready lists
+	if (leading_zeroes == 32) {
+		return NULL;
+	} else {
+		return list + leading_zeroes;
+	}
 }

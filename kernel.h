@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "rtos.h"
+#include "scheduler.h"
 
 // used to initialize all kernel data structures
 // must be first os function called
