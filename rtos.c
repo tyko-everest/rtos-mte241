@@ -69,7 +69,7 @@ __asm void PendSV_Handler(void) {
 
 void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask) {
 	// disable IRQ to ensure function runs fully
-	__disable_irq();
+	disable_irq();
 	// check task is not NULL
 	if (task == NULL) {
 		return;
@@ -90,13 +90,13 @@ void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask) {
 		task->next = NULL;
 		list->tail = task;
 	}
-	__enable_irq();
+	enable_irq();
 }
 
 // returns the pointer of the removed tcb
 tcb_t * dequeue(task_list_t *list, uint32_t *mask) {
 	// disable IRQ to ensure function runs fully
-	__disable_irq();
+	disable_irq();
 	tcb_t *ret_tcb;
 	// check if it is empty
 	if (list->head == NULL) {
@@ -118,7 +118,7 @@ tcb_t * dequeue(task_list_t *list, uint32_t *mask) {
 		// advance the head to the second item in the list
 		list->head = list->head->next;
 	}
-	__enable_irq();
+	enable_irq();
 	return ret_tcb;
 }
 
@@ -141,3 +141,34 @@ task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask) {
 		return list + leading_zeroes;
 	}
 }
+
+void print_list_contents(task_list_t *list) {
+	int count[NUM_PRIORITIES] = {0};
+	for (int i = 0; i < NUM_PRIORITIES; i++) {
+		task_list_t *next_list = list + i;
+		tcb_t *task = next_list->head;
+		while(task != NULL) {
+			task = task->next;
+			count[i]++;
+		}
+	}
+	for (int i = 0; i < 3; i++) {
+		printf("Priority: %d, Count: %d\n", i, count[i]);
+	}
+	printf("\n");
+}
+
+uint32_t num_disables = 0;
+
+void disable_irq() {
+	__disable_irq();
+	num_disables++;
+}
+
+void enable_irq() {
+	num_disables--;
+	if (num_disables == 0) {
+		__enable_irq();
+	}
+}
+

@@ -59,4 +59,11 @@ tcb_t * dequeue(task_list_t *list, uint32_t *mask);
 // the highest priority non-empty list
 task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask);
 
+void print_list_contents(task_list_t *list);
+
+// use these to make nested interrupts disabling work
+void disable_irq(void);
+void enable_irq(void);
+
+
 #endif /* INCLUDE_RTOS_H */
