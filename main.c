@@ -6,8 +6,13 @@
 
 #include "kernel.h"
 #include "blocking.h"
+#include "test_queue.h"
+
+#include "rtos.h"
 
 extern uint32_t prev_sp, curr_sp;
+extern task_list_t ready[NUM_PRIORITIES];
+extern uint32_t ready_mask;
 
 os_semaphore_id_t sem;
 
@@ -18,7 +23,7 @@ void delay() {
 void t1(void *arg) {
 	while (1) {
 		os_wait(sem);
-		printf("task1\n");
+		//printf("taskasdfjuhdaskjhflkjdhasfkjhadkshfl1\n");
 		os_signal(sem);
 		
 		delay();
@@ -29,7 +34,7 @@ void t1(void *arg) {
 void t2(void *arg) {
 	while (1) {
 		os_wait(sem);
-		printf("task2\n");
+		//printf("taskadfshkjadhsjkflhladshfkjadhskljfkdash2\n");
 		os_signal(sem);
 		
 		delay();
@@ -40,7 +45,7 @@ void t2(void *arg) {
 void t3(void *arg) {
 	while (1) {
 		//os_wait(sem);
-		printf("task3\n");
+		//printf("task3\n");
 		//os_signal(sem);
 		
 		delay();
@@ -53,16 +58,39 @@ int main(void) {
 	
 	os_kernel_init();
 	
+	//os_add_task(t1, NULL, NULL);
+	//os_add_task(t2, NULL, NULL);
+	//print_list_contents(ready);
+	//os_add_task(t2, NULL, NULL);
+//	print_list_contents(ready);
+
+	//dequeue(ready + DEF_PRIORITY, &ready_mask);
+	//print_list_contents(ready);
+
+	//dequeue(ready + DEF_PRIORITY, &ready_mask);
+	//print_list_contents(ready);
+
+	//dequeue(ready + DEF_PRIORITY, &ready_mask);
+	//print_list_contents(ready);
+
+	//dequeue(ready + DEF_PRIORITY, &ready_mask);
+	
 	os_task_attribs_t t1_attribs = {1};
 	os_task_attribs_t t2_attribs = {1};
 	os_task_attribs_t t3_attribs = {1};
 	
-	os_add_task(t1, NULL, &t1_attribs);
+	os_add_task(t1, NULL, &t1_attribs);	
+		print_list_contents(ready);
+
 	os_add_task(t2, NULL, &t2_attribs);
-	//os_add_task(t3, NULL, &t3_attribs);
-	
+		print_list_contents(ready);
+
+	os_add_task(t3, NULL, &t3_attribs);
+		print_list_contents(ready);
+
 	os_new_semaphore(&sem, 1);
 	
+	//test_queues();
 	os_kernel_start();
 }
 

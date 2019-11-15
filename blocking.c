@@ -1,6 +1,6 @@
 #include "blocking.h"
 
-extern task_list_t *running;
+extern task_list_t running;
 extern task_list_t ready[MAX_NUM_TASKS];
 extern uint32_t ready_mask;
 
@@ -34,7 +34,7 @@ void os_wait(os_semaphore_id_t sem_id) {
 	__disable_irq();
 	// check if we need to block first
 	if (sem_list[sem_id].count == 0) {
-		enqueue(running->head, sem_list[sem_id].blocked + running->head->priority, &sem_list[sem_id].blocked_mask);
+		enqueue(running.head, sem_list[sem_id].blocked + running.head->priority, &sem_list[sem_id].blocked_mask);
 		os_schedule(true);
 	}
 	__disable_irq();
@@ -54,7 +54,7 @@ void os_signal(os_semaphore_id_t sem_id) {
 		tcb_t *task = dequeue(list, &sem_list[sem_id].blocked_mask);
 		enqueue(task, ready + task->priority, &ready_mask);
 		// see if it's priority is higher than the running task's priority
-		if (task->priority > running->head->priority) {
+		if (task->priority > running.head->priority) {
 			os_schedule(false);
 		}
 	}
