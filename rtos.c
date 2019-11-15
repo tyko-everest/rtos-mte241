@@ -69,7 +69,7 @@ __asm void PendSV_Handler(void) {
 
 void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask) {
 	// disable IRQ to ensure function runs fully
-	__disable_irq();
+	disable_irq();
 	// check task is not NULL
 	if (task == NULL) {
 		return;
@@ -90,13 +90,13 @@ void enqueue(tcb_t *task, task_list_t *list, uint32_t *mask) {
 		task->next = NULL;
 		list->tail = task;
 	}
-	__enable_irq();
+	enable_irq();
 }
 
 // returns the pointer of the removed tcb
 tcb_t * dequeue(task_list_t *list, uint32_t *mask) {
 	// disable IRQ to ensure function runs fully
-	__disable_irq();
+	disable_irq();
 	tcb_t *ret_tcb;
 	// check if it is empty
 	if (list->head == NULL) {
@@ -118,7 +118,7 @@ tcb_t * dequeue(task_list_t *list, uint32_t *mask) {
 		// advance the head to the second item in the list
 		list->head = list->head->next;
 	}
-	__enable_irq();
+	enable_irq();
 	return ret_tcb;
 }
 
@@ -157,3 +157,18 @@ void print_list_contents(task_list_t *list) {
 	}
 	printf("\n");
 }
+
+uint32_t num_disables = 0;
+
+void disable_irq() {
+	__disable_irq();
+	num_disables++;
+}
+
+void enable_irq() {
+	num_disables--;
+	if (num_disables == 0) {
+		__enable_irq();
+	}
+}
+

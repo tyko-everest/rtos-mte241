@@ -31,19 +31,19 @@ os_error_t os_new_semaphore(os_semaphore_id_t *sem_id, uint32_t init_count) {
 }
 
 void os_wait(os_semaphore_id_t sem_id) {
-	__disable_irq();
+	disable_irq();
 	// check if we need to block first
 	if (sem_list[sem_id].count == 0) {
 		enqueue(running.head, sem_list[sem_id].blocked + running.head->priority, &sem_list[sem_id].blocked_mask);
 		os_schedule(true);
 	}
-	__disable_irq();
+	enable_irq();
+	// this may need to be in crit section
 	sem_list[sem_id].count--;
-	__enable_irq();
 }
 
 void os_signal(os_semaphore_id_t sem_id) {
-	__disable_irq();
+	disable_irq();
 	sem_list[sem_id].count++;
 	// get the highest priority blocked task list
 	task_list_t *list = highest_priority_list(sem_list[sem_id].blocked, sem_list[sem_id].blocked_mask);
@@ -58,6 +58,6 @@ void os_signal(os_semaphore_id_t sem_id) {
 			os_schedule(false);
 		}
 	}
-	__enable_irq();
+	enable_irq();
 }
 

@@ -17,28 +17,30 @@ extern uint32_t ready_mask;
 os_semaphore_id_t sem;
 
 void delay() {
-	for (int i = 0; i < 100000; i++);
+	for (int i = 0; i < 1000; i++);
 }
+
+uint32_t a = 0, b = 0, c = 0;
 
 void t1(void *arg) {
 	while (1) {
 		os_wait(sem);
-		//printf("taskasdfjuhdaskjhflkjdhasfkjhadkshfl1\n");
+		a++;
+		c++;
 		os_signal(sem);
 		
 		delay();
-		
 	}
 }
 
 void t2(void *arg) {
 	while (1) {
 		os_wait(sem);
-		//printf("taskadfshkjadhsjkflhladshfkjadhskljfkdash2\n");
+		b++;
+		c++;
 		os_signal(sem);
 		
 		delay();
-		
 	}
 }
 
@@ -80,13 +82,13 @@ int main(void) {
 	os_task_attribs_t t3_attribs = {1};
 	
 	os_add_task(t1, NULL, &t1_attribs);	
-		print_list_contents(ready);
+	//print_list_contents(ready);
 
 	os_add_task(t2, NULL, &t2_attribs);
-		print_list_contents(ready);
+	//print_list_contents(ready);
 
-	os_add_task(t3, NULL, &t3_attribs);
-		print_list_contents(ready);
+	//os_add_task(t3, NULL, &t3_attribs);
+	//print_list_contents(ready);
 
 	os_new_semaphore(&sem, 1);
 	
