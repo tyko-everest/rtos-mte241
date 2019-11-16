@@ -1,5 +1,5 @@
-#ifndef INCLUDE_TEST_QUEUE_H
-#define INCLUDE_TEST_QUEUE_H
+#ifndef INCLUDE_TEST_SUITE_H
+#define INCLUDE_TEST_SUITE_H
 
 #include <LPC17xx.h>
 #include <stdbool.h>
@@ -14,4 +14,4 @@
 
 void test_queues(void);
 
-#endif /* INCLUDE_TEST_QUEUE_H */
+#endif /* INCLUDE_TEST_SUITE_H */

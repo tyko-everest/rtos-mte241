@@ -1,6 +1,4 @@
-#ifdef TEST_QUEUE
-
-#include "test_queue.h"
+#include "test_suite.h"
 
 extern task_list_t running;
 extern uint32_t ready_mask;
@@ -36,5 +34,3 @@ void test_queues(void) {
 
 	dequeue(ready + DEF_PRIORITY, &ready_mask);
 }
-
-#endif

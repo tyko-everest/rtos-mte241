@@ -6,7 +6,7 @@
 
 #include "kernel.h"
 #include "blocking.h"
-#include "test_queue.h"
+#include "test_suite.h"
 
 #include "rtos.h"
 
