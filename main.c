@@ -85,7 +85,7 @@ int main(void) {
 	os_add_task(t2, NULL, &t2_attribs);
 	//print_list_contents(ready);
 
-	os_add_task(t3, NULL, &t3_attribs);
+	//os_add_task(t3, NULL, &t3_attribs);
 	//print_list_contents(ready);
 
 	//os_new_semaphore(&sem, 1);

@@ -93,7 +93,7 @@ void os_kernel_start() {
 	NVIC_SetPriority(PendSV_IRQn, 0xFF);
 	
 	// every 5 ms switch
-	SysTick_Config(SystemCoreClock / 1000 * 20);
+	SysTick_Config(SystemCoreClock / 1000 * 5);
 	
 	// call scheduler
 	os_schedule(false);

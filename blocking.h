@@ -17,7 +17,9 @@ typedef struct {
 	uint32_t blocked_mask;
 	uint32_t count;
 	// only used for mutexes
-	uint32_t owner_id;
+	uint32_t owner_orig_prio;
+	tcb_t *current_owner;
+
 } os_semaphore_t;
 
 typedef uint32_t os_semaphore_id_t;
