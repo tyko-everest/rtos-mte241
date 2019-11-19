@@ -7,9 +7,10 @@ extern uint32_t ready_mask;
 os_semaphore_t sem_list[MAX_SEMAPHORES];
 
 os_error_t os_new_semaphore(os_semaphore_id_t *sem_id, uint32_t init_count) {
+	// used to keep track of number of semaphores and mutexes
+	static uint32_t num_sems = 0;
 	
 	// all static memory so there is a fixed number of semaphores allowed
-	static uint32_t num_sems = 0;
 	if (num_sems >= MAX_SEMAPHORES) {
 		return OS_ERR_MEM;
 	}
@@ -38,8 +39,13 @@ void os_wait(os_semaphore_id_t sem_id) {
 		os_schedule(true);
 	}
 	enable_irq();
-	// this may need to be in crit section
+	// this is needed so interrupt can trigger
+	__asm {
+		nop
+	}
+	enable_irq();
 	sem_list[sem_id].count--;
+	disable_irq();
 }
 
 void os_signal(os_semaphore_id_t sem_id) {
@@ -59,5 +65,20 @@ void os_signal(os_semaphore_id_t sem_id) {
 		}
 	}
 	enable_irq();
+}
+
+os_error_t os_new_mutex(os_semaphore_id_t *mutex_id) {
+	return os_new_semaphore(mutex_id, 1);
+}
+
+void os_acquire(os_mutex_id_t mutex_id) {
+	sem_list[mutex_id].owner_id = running.head->id;
+	os_wait(mutex_id);
+}
+
+void os_release(os_mutex_id_t mutex_id) {
+	if (running.head->id == sem_list[mutex_id].owner_id) {
+		os_signal(mutex_id);
+	}
 }
 

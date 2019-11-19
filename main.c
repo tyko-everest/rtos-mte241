@@ -15,19 +15,20 @@ extern task_list_t ready[NUM_PRIORITIES];
 extern uint32_t ready_mask;
 
 os_semaphore_id_t sem;
+os_mutex_id_t mutex;
 
 void delay() {
-	for (int i = 0; i < 1000; i++);
+	for (int i = 0; i < 100; i++);
 }
 
 uint32_t a = 0, b = 0, c = 0;
 
 void t1(void *arg) {
 	while (1) {
-		os_wait(sem);
+		os_acquire(mutex);
 		a++;
 		c++;
-		os_signal(sem);
+		os_release(mutex);
 		
 		delay();
 	}
@@ -35,21 +36,18 @@ void t1(void *arg) {
 
 void t2(void *arg) {
 	while (1) {
-		os_wait(sem);
+		os_acquire(mutex);
 		b++;
 		c++;
-		os_signal(sem);
-		
+		os_release(mutex);
+	
 		delay();
 	}
 }
 
 void t3(void *arg) {
 	while (1) {
-		//os_wait(sem);
-		//printf("task3\n");
-		//os_signal(sem);
-		
+		printf("task\n");
 		delay();
 		
 	}
@@ -87,10 +85,11 @@ int main(void) {
 	os_add_task(t2, NULL, &t2_attribs);
 	//print_list_contents(ready);
 
-	//os_add_task(t3, NULL, &t3_attribs);
+	os_add_task(t3, NULL, &t3_attribs);
 	//print_list_contents(ready);
 
-	os_new_semaphore(&sem, 1);
+	//os_new_semaphore(&sem, 1);
+	os_new_mutex(&mutex);
 	
 	//test_queues();
 	os_kernel_start();
