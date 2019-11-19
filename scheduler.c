@@ -6,6 +6,9 @@ extern uint32_t ready_mask;
 extern uint32_t **curr_sp;
 extern uint32_t **next_sp;
 
+uint32_t ms_ticks = 0;
+
+
 void os_schedule(bool blocked) {
 	
 	disable_irq();
@@ -42,5 +45,12 @@ void os_schedule(bool blocked) {
 }
 
 void SysTick_Handler(void) {
-	os_schedule(false);
+	ms_ticks++;
+	if (ms_ticks % TIMESLICE_MS == 0) {
+		os_schedule(false);
+	}
+}
+
+uint32_t get_ticks(void) {
+	return ms_ticks;
 }

@@ -142,16 +142,24 @@ task_list_t* highest_priority_list(task_list_t* list, uint32_t priority_mask) {
 	}
 }
 
-void print_list_contents(task_list_t *list) {
-	int count[NUM_PRIORITIES] = {0};
+// Modifies the passed array
+void list_contents(task_list_t *list, int* count) {
 	for (int i = 0; i < NUM_PRIORITIES; i++) {
+		uint32_t num_tasks_in_list = 0;
 		task_list_t *next_list = list + i;
 		tcb_t *task = next_list->head;
 		while(task != NULL) {
 			task = task->next;
-			count[i]++;
+			num_tasks_in_list++;
 		}
+		count[i] = num_tasks_in_list;
 	}
+}
+
+void print_list(task_list_t *list) {
+	int count[NUM_PRIORITIES] = {0};
+	list_contents(list, count);
+
 	for (int i = 0; i < 3; i++) {
 		printf("Priority: %d, Count: %d\n", i, count[i]);
 	}

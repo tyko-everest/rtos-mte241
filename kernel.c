@@ -92,8 +92,8 @@ void os_kernel_start() {
     // context switching should be the lowest priority
 	NVIC_SetPriority(PendSV_IRQn, 0xFF);
 	
-	// every 5 ms switch
-	SysTick_Config(SystemCoreClock / 1000 * 20);
+	// every 1 ms switch
+	SysTick_Config(SystemCoreClock / 1000);
 	
 	// call scheduler
 	os_schedule(false);
