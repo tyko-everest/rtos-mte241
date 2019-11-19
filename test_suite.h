@@ -8,10 +8,14 @@
 #include <string.h>
 
 #include "kernel.h"
-
+#include "blocking.h"
 #include "rtos.h"
 #include "scheduler.h"
 
-void test_queues(void);
+void t1(void *arg);
+void t2(void *arg);
+
+bool test_queues(void);
+void test_semaphores(void);
 
 #endif /* INCLUDE_TEST_SUITE_H */
