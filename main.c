@@ -6,7 +6,7 @@
 
 #include "kernel.h"
 #include "blocking.h"
-#include "test_queue.h"
+#include "test_suite.h"
 
 #include "rtos.h"
 
@@ -128,7 +128,12 @@ void t4(void *arg) {
 
 int main(void) {
 	printf("\nStarting RTOS\n\n");
+//	if(test_queues())
+//		printf("success");
+//	else
+//		printf("fail");
 	
+
 	os_kernel_init();
 	
 	// task used to start higher priority tasks at later times
@@ -156,5 +161,6 @@ int main(void) {
  	os_new_mutex(&mutex, MUTEX_MODE_INHER);
 	
 	os_kernel_start();
+
 }
 

@@ -7,9 +7,9 @@ extern uint32_t **curr_sp;
 extern uint32_t **next_sp;
 
 bool running_handled = false;
+uint32_t ms_ticks = 0;
 
 void os_schedule() {
-	
 	disable_irq();
 	
 	// dequeue running task from running list
@@ -49,5 +49,12 @@ void os_yield(void) {
 }
 
 void SysTick_Handler(void) {
-	os_schedule();
+	ms_ticks++;
+	if (ms_ticks % TIMESLICE_MS == 0) {
+		os_schedule();
+	}
+}
+
+uint32_t get_ticks(void) {
+	return ms_ticks;
 }

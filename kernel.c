@@ -92,8 +92,8 @@ void os_kernel_start() {
     // context switching should be the lowest priority
 	NVIC_SetPriority(PendSV_IRQn, 0xFF);
 	
-	// every 5 ms switch
-	SysTick_Config(SystemCoreClock / 1000 * 5);
+	// setup Systick Interrupt for ms ticks
+	SysTick_Config(SystemCoreClock / 1000);
 	
 	// call scheduler
 	os_idle_task(NULL);
