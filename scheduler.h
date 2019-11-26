@@ -9,7 +9,9 @@
 #define TIMESLICE_MS 5
 
 // find next task to move to running list && update global variable holding list of 
-void os_schedule(bool blocked);
+void os_schedule(void);
+
+void os_yield(void);
 
 uint32_t get_ticks(void);
 

@@ -45,7 +45,8 @@ typedef struct {
 typedef enum _os_error {
 	OS_OK = 0,
 	OS_ERR_MEM,
-	OS_ERR_ARG
+	OS_ERR_ARG,
+	OS_ERR_PERM
 } os_error_t;
 
 // tasks must be of this type

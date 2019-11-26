@@ -6,23 +6,23 @@ extern uint32_t ready_mask;
 extern uint32_t **curr_sp;
 extern uint32_t **next_sp;
 
+bool running_handled = false;
 uint32_t ms_ticks = 0;
 
-
-void os_schedule(bool blocked) {
-	
+void os_schedule() {
 	disable_irq();
 	
 	// dequeue running task from running list
 	tcb_t* curr_task = dequeue(&running, NULL);
 	
 	// If the running task wasn't blocked, it will be placed in the correct list
-	if (!blocked) {
+	if (!running_handled) {
 		// Find task_list to add prev_running_task to
 		task_list_t* curr_task_list = ready + curr_task->priority;
 		// enqueue curr_task task to it's priority level list
 		enqueue(curr_task, curr_task_list, &ready_mask);
 	}
+	running_handled = false;
 	
 	// Find task_list to remove next_task from
 	task_list_t* next_task_list = highest_priority_list(ready, ready_mask);
@@ -44,10 +44,14 @@ void os_schedule(bool blocked) {
 	enable_irq();
 }
 
+void os_yield(void) {
+	os_schedule();
+}
+
 void SysTick_Handler(void) {
 	ms_ticks++;
 	if (ms_ticks % TIMESLICE_MS == 0) {
-		os_schedule(false);
+		os_schedule();
 	}
 }
 
