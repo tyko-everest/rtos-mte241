@@ -21,11 +21,22 @@ void test_context_switch(void);
 
 void sem_t1(void *arg);
 void sem_t2(void *arg);
+void sem_t3(void *arg);
+void sem_t4(void *arg);
+
 void test_semaphores(void);
+void test_semaphores_2(void);
 
 void test_fpp(void);
 
 void mutex_t1(void *arg);
 void mutex_t2(void *arg);
 
+void prio_t1(void *arg);
+void prio_t2(void *arg);
+void prio_t3(void *arg);
+void prio_t4(void *arg);
+
+void test_prio_inher(void);
+void test_mutex_ownership(void);
 #endif /* INCLUDE_TEST_SUITE_H */

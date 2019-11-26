@@ -73,6 +73,9 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
 }
 
 void os_kernel_start() {
+	
+	printf("\nStarting RTOS\n\n");
+
 	// reset MSP
 	__set_MSP(MAIN_STACK_BASE_ADDR);
 	
