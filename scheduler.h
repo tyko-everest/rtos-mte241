@@ -9,4 +9,6 @@
 // find next task to move to running list && update global variable holding list of 
 void os_schedule(void);
 
+void os_yield(void);
+
 #endif /* INCLUDE_SCHEDULER_H */

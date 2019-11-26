@@ -58,8 +58,6 @@ void t2(void *arg) {
 	while (1) {
 		os_acquire(mutex);
 		printf("highest task ran\n");
-		
-		
 	}
 }
 
@@ -76,45 +74,57 @@ void t4(void *arg) {
 	printf("Lowest Released\n");
 	while (1) {
 		os_acquire(mutex);
-		printf("lowest task ran\n");
+		printf("lowest started\n");
 		delay();
+		printf("lowest ended\n");
 		os_release(mutex);
 	}
 }
 
-uint32_t a = 0, b = 0, c = 0;
+//uint32_t a = 0, b = 0, c = 0;
 
-os_semaphore_id_t sem;
-os_mutex_id_t mut;
+//os_semaphore_id_t sem;
+//os_mutex_id_t mut;
 
-void t5(void *arg) {
-	while (1) {
-		//for (int i = 0; i < 20; i++);
-		os_acquire(mutex);
-		for (int i = 0; i < 10; i++) {
-			printf("Task 1\n");
-		}
+//void t5(void *arg) {
+//	while (1) {
+//		os_acquire(mutex);
+//		for (int i = 0; i < 10; i++) {
+//			printf("Task 1\n");
+//		}
 //		a++;
 //		c++;
-		//for (int i = 0; i < 40; i++);
-		os_release(mutex);
-	}
-}
+//		//printf("%d    \n", a);
+//		os_release(mutex);
+//		os_yield();
+//	}
+//}
 
-void t6(void *arg) {
-	while (1) {
-		//for (int i = 0; i < 20; i++);
-		os_acquire(mutex);
-		for (int i = 0; i < 10; i++) {
-			printf("Task 2\n");
-		}
-
+//void t6(void *arg) {
+//	while (1) {
+//		os_acquire(mutex);
+//		for (int i = 0; i < 10; i++) {
+//			printf("Task 2\n");
+//		}
 //		b++;
 //		c++;
-		//for (int i = 0; i < 40; i++);
-		os_release(mutex);
-	}
-}
+//		os_release(mutex);
+//		os_yield();
+//	}
+//}
+
+//void t7(void *arg) {
+//	while (1) {
+//		os_acquire(mutex);
+//		for (int i = 0; i < 10; i++) {
+//			printf("Task 3\n");
+//		}
+//		b++;
+//		c++;
+//		os_release(mutex);
+//		os_yield();
+//	}
+//}
 
 int main(void) {
 	printf("\nStarting RTOS\n\n");
@@ -130,19 +140,20 @@ int main(void) {
 	// lowest priority task that shares the mutex with highest prio task
 	os_task_attribs_t t4_attribs = {2};
 	
-//	os_add_task(t1, NULL, &t1_attribs);	
-//	os_add_task(t2, NULL, &t2_attribs);
-//	os_add_task(t3, NULL, &t3_attribs);
-//	os_add_task(t4, NULL, &t4_attribs);
+	os_add_task(t1, NULL, &t1_attribs);	
+	os_add_task(t2, NULL, &t2_attribs);
+	os_add_task(t3, NULL, &t3_attribs);
+	os_add_task(t4, NULL, &t4_attribs);
 	
-	os_add_task(t5, NULL, NULL);
-	os_add_task(t6, NULL, NULL);
-//	os_error_t state = os_new_mutex(&mut, 0);
-	os_error_t state = os_new_semaphore(&sem, 1);
+//	os_add_task(t5, NULL, NULL);
+//	os_add_task(t6, NULL, NULL);
+//	os_add_task(t7, NULL, NULL);
+//	os_error_t state = os_new_mutex(&mutex, MUTEX_MODE_OWNER);
+	//os_error_t state = os_new_semaphore(&sem, 1);
 
-//	os_new_semaphore(&highest_blocker, 0);
-//	os_new_semaphore(&medium_blocker, 0);
- 	os_new_mutex(&mutex, MUTEX_MODE_INHER | MUTEX_MODE_OWNER);
+	os_new_semaphore(&highest_blocker, 0);
+	os_new_semaphore(&medium_blocker, 0);
+ 	os_new_mutex(&mutex, MUTEX_MODE_INHER);
 	
 	os_kernel_start();
 }

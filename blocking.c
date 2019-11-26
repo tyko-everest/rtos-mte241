@@ -35,19 +35,17 @@ os_error_t os_new_semaphore(os_semaphore_id_t *sem_id, uint32_t init_count) {
 void os_wait(os_semaphore_id_t sem_id) {
 	disable_irq();
 	// check if we need to block first
-	if (sem_list[sem_id].count == 0) {
-		enqueue(running.head, sem_list[sem_id].blocked + running.head->priority, &sem_list[sem_id].blocked_mask);
+	while (sem_list[sem_id].count == 0) {
+		enqueue(running.head, sem_list[sem_id].blocked + running.head->priority,
+				&sem_list[sem_id].blocked_mask);
 		// running task has been put somewhere, so scheduler shouldn't also add
 		// to ready
 		running_handled = true;
 		os_schedule();
+		enable_irq();
+		// interrupt will trigger here if a context switch is needed
+		disable_irq();
 	}
-	enable_irq();
-	// this is needed so interrupt can trigger?
-	__asm {
-		nop
-	}
-	disable_irq();
 	sem_list[sem_id].count--;
 	enable_irq();
 }
@@ -64,7 +62,10 @@ void os_signal(os_semaphore_id_t sem_id) {
 		// add its head to the appropriate ready list
 		tcb_t *task = dequeue(list, &sem_list[sem_id].blocked_mask);
 		enqueue(task, ready + task->priority, &ready_mask);
-		os_schedule();
+		// only call the scheduler if the unblocked task is higher prio
+		if (running.head->priority > task->priority) {
+			os_schedule();
+		}
 
 	}
 	enable_irq();
@@ -87,13 +88,14 @@ void os_acquire(os_mutex_id_t mutex_id) {
 	
 	// if you already have it acquired, you good, keep it up man!
 	if (sem_list[mutex_id].mode & MUTEX_MODE_OWNER &&
-				sem_list[mutex_id].current_owner->id == running.head->id) {
+			sem_list[mutex_id].current_owner != NULL &&
+			sem_list[mutex_id].current_owner->id == running.head->id) {
 		enable_irq();
 		return;
 	}
 	
 	// check if we need to block first
-	if (sem_list[mutex_id].count == 0) {
+	while (sem_list[mutex_id].count == 0) {
 		// add this task to correct blocked list
 		enqueue(running.head, sem_list[mutex_id].blocked + running.head->priority,
 				&sem_list[mutex_id].blocked_mask);
@@ -136,6 +138,11 @@ os_error_t os_release(os_mutex_id_t mutex_id) {
 		
 	// successfully released
 	sem_list[mutex_id].count++;
+	
+	// reset owner to NULL if ownership is enabled
+	if (sem_list[mutex_id].mode & MUTEX_MODE_OWNER) {
+		sem_list[mutex_id].current_owner = NULL;
+	}
 				
 	// get the highest priority blocked task list
 	task_list_t *list = highest_priority_list(sem_list[mutex_id].blocked,
@@ -179,7 +186,10 @@ os_error_t os_release(os_mutex_id_t mutex_id) {
 		// add its head to the appropriate ready list
 		tcb_t *task = dequeue(list, &sem_list[mutex_id].blocked_mask);
 		enqueue(task, ready + task->priority, &ready_mask);
-		os_schedule();
+		// only call the scheduler if the unblocked task is higher prio
+		if (running.head->priority > task->priority) {
+			os_schedule();
+		}
 
 	}
 	enable_irq();

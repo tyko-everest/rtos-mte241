@@ -44,6 +44,10 @@ void os_schedule() {
 	enable_irq();
 }
 
+void os_yield(void) {
+	os_schedule();
+}
+
 void SysTick_Handler(void) {
 	os_schedule();
 }
