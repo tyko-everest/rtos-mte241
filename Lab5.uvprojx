@@ -416,9 +416,9 @@
               <FilePath>.\kernel.c</FilePath>
             </File>
             <File>
-              <FileName>test_queue.c</FileName>
+              <FileName>test_suite.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\test_queue.c</FilePath>
+              <FilePath>.\test_suite.c</FilePath>
             </File>
           </Files>
         </Group>

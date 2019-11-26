@@ -46,7 +46,7 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
 	tcb_list[curr_num_tasks].priority = attribs->priority;
 	
 	tcb_list[curr_num_tasks].id = curr_num_tasks;
-
+	
 	// set the stack pointer to the end of this constructed stack setup
 	tcb_list[curr_num_tasks].sp -= NUM_REGS;
 	
@@ -73,6 +73,9 @@ os_error_t os_add_task(os_task_func_t func_pointer, void *args, os_task_attribs_
 }
 
 void os_kernel_start() {
+	
+	printf("\nStarting RTOS\n\n");
+
 	// reset MSP
 	__set_MSP(MAIN_STACK_BASE_ADDR);
 	
@@ -87,16 +90,16 @@ void os_kernel_start() {
 	__set_PSP(TASK_STACK_BASE_ADDR(0));
 	
 	// setup interrupt priorties
-    // SysTick is the highest, it should override anything
+  // SysTick is the highest, it should override anything
 	NVIC_SetPriority(SysTick_IRQn, 0);
     // context switching should be the lowest priority
 	NVIC_SetPriority(PendSV_IRQn, 0xFF);
 	
-	// every 5 ms switch
-	SysTick_Config(SystemCoreClock / 1000 * 5);
+	// setup Systick Interrupt for ms ticks
+	SysTick_Config(SystemCoreClock / 1000);
 	
 	// call scheduler
-	os_schedule(false);
+	os_idle_task(NULL);
 }
 
 void os_idle_task(void *args) {
