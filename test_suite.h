@@ -14,8 +14,18 @@
 
 void t1(void *arg);
 void t2(void *arg);
+void t3(void *arg);
 
 bool test_queues(void);
+void test_context_switch(void);
+
+void sem_t1(void *arg);
+void sem_t2(void *arg);
 void test_semaphores(void);
+
+void test_fpp(void);
+
+void mutex_t1(void *arg);
+void mutex_t2(void *arg);
 
 #endif /* INCLUDE_TEST_SUITE_H */
