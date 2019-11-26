@@ -7,6 +7,6 @@
 #include "rtos.h"
 
 // find next task to move to running list && update global variable holding list of 
-void os_schedule(bool blocked);
+void os_schedule(void);
 
 #endif /* INCLUDE_SCHEDULER_H */
