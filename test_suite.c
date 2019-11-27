@@ -15,6 +15,18 @@ void delay() {
 	for (int i = 0; i < 1000000; i++);
 }
 
+void context_t1(void *arg) {
+	while (1) {
+		printf("Task 1\n");
+	}
+}
+
+void context_t2(void *arg) {
+	while (1) {
+		printf("Task 2\n");
+	}
+}
+
 void t1(void *arg) {
 	while (1) {
 		os_acquire(print_mutex);
@@ -95,8 +107,8 @@ bool test_queues(void) {
 
 void test_context_switch(void) {
 	os_kernel_init();
-	os_add_task(t1, NULL, NULL);	
-	os_add_task(t2, NULL, NULL);
+	os_add_task(context_t1, NULL, NULL);	
+	os_add_task(context_t2, NULL, NULL);
 	os_kernel_start();
 }
 
@@ -285,10 +297,10 @@ void mutex_stealer(void *arg) {
 	os_acquire(print_mutex);
 	if (error == OS_ERR_PERM) {
 		
-		printf("Failed to steal mutex\n");
+		printf("Task 2 failed to steal mutex\n");
 	}
 	else {
-		printf("Successfully stole the mutex\n");
+		printf("Task 2 successfully stole the mutex\n");
 	}
 	os_release(print_mutex);
 	while(1);

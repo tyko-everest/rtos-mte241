@@ -12,12 +12,12 @@
 
 int main(void) {
 	//test_context_switch();
+	//test_fpp();
 	//test_semaphores();
 	//test_semaphores_2();
-
-	test_fpp();
-	//test_prio_inher();
-	test_mutex_ownership();
+	
+	//test_mutex_ownership();	
+	test_prio_inher();
 }
 
 
