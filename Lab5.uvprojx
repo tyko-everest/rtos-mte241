@@ -420,6 +420,16 @@
               <FileType>1</FileType>
               <FilePath>.\test_suite.c</FilePath>
             </File>
+            <File>
+              <FileName>GLCD_SPI_LPC1700.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\GLCD_SPI_LPC1700.c</FilePath>
+            </File>
+            <File>
+              <FileName>apple.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\apple.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

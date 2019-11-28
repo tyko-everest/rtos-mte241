@@ -6,7 +6,7 @@
 
 #include "rtos.h"
 
-#define TIMESLICE_MS 5
+#define TIMESLICE_MS 1
 
 // find next task to move to running list && update global variable holding list of 
 void os_schedule(void);
